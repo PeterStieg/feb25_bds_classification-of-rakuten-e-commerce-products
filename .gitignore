@@ -7,3 +7,7 @@
 *.jpeg
 *.JPG
 *.JPEG
+
+# Ignore macOS specific Desktop Service Store
+.DS_Store
+**/.DS_Store
