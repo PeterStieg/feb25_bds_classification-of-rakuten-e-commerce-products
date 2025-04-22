@@ -1,5 +1,31 @@
 # feb25_bds_classification-of-rakuten-e-commerce-products
 
+## Meeting Notes: April 22nd
+
+1. **Mandatory task**: Text preprocessing ()
+    1. Save vectorizers in pickle file
+    2. @Wilsbert12: Could you please correct these notes and fill in the gaps?
+    3. Time estimate:
+        1. Not more than 5 hours for this part of project
+        2. Not more than 2 hours for training
+    3. deepL_result.csv: Temporary file we can probably include in .gitignore @thomas-borer
+    4. df_localization.csv: Latest and greatest in terms of localization 
+
+## Meeting Notes: April 17th
+IMPORTANT NOTE: We are running very late. Defense is on the week of the 12th of may. We still do not have the complete translation.
+**IMPORTANT TASK: GET TRANSLATION READY ASAP!**
+
+1. **Traditional ML:**
+    - Problem: Long computing times
+    - Solution:
+        - Vectorization before pipeline -> save & reuse
+        - One set of Hyperparameters per vectorization only (do more if time allows)
+        - deepl_results ist die falsche Datei als Input -> richtige Datei?
+        - Use resources like Google Colab to access GPU -> speed x10
+
+
+
+
 ## Meeting Notes: April 17th
 
 `NOTE: Time left until deadline May 2nd: Two weeks`
