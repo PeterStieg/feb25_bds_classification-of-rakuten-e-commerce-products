@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import text_utils
 import deepl
 import os
 deepl_file = 'language_analysis/df_localization.csv'
@@ -33,13 +34,16 @@ def safe_create_column(column, data_frame):
     return data_frame
 
 def apply_translation_conditionally(df):
+    from tqdm.auto import tqdm
+    tqdm.pandas()
     mask = (
         ~df['lang'].isin(ignore_language_codes) &
         # removing french, language codes which do not use latin script as well as nonsense language codes
         # The fact that the LLM failed might indicate that there is something off with these strings
         (df['deepL_translation'].isna())
     )
-    df.loc[mask, 'deepL_translation'] = df.loc[mask, 'merged_text'].apply(deepl_translation)
+    translated = df.loc[mask, 'merged_text'].progress_apply(deepl_translation)
+    df.loc[mask, 'deepL_translation'] = translated.values
     return df
 
 def apply_translation_conditionally_in_chunks(df, chunk_size=200, output_file=deepl_output_file):
@@ -58,7 +62,7 @@ def apply_translation_conditionally_in_chunks(df, chunk_size=200, output_file=de
         df.update(df_chunk)
         
         # Write the processed chunk to CSV (append mode)
-        df_chunk.to_csv(output_file, mode='a', index=True)
+        df_chunk.to_csv(output_file, mode='a', index=False, header=False,)
         
         # After the first chunk, subsequent chunks should not include the header
         rows_left -= chunk_size
