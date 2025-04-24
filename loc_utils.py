@@ -62,7 +62,7 @@ def apply_translation_conditionally_in_chunks(df, chunk_size=200, output_file=de
         df.update(df_chunk)
         
         # Write the processed chunk to CSV (append mode)
-        df_chunk.to_csv(output_file, mode='a', index=False, header=False,)
+        df_chunk.to_csv(output_file, mode='a', index=False, header=False)
         
         # After the first chunk, subsequent chunks should not include the header
         rows_left -= chunk_size
