@@ -1,5 +1,53 @@
 # feb25_bds_classification-of-rakuten-e-commerce-products
 
+## Meeting Notes: April 22nd
+
+1. **Mandatory task**: Text preprocessing ()
+    1. Save vectorizers in pickle file
+    2. @Wilsbert12: Could you please correct these notes and fill in the gaps?
+    3. Time estimate:
+        1. Not more than 5 hours for this part of project
+        2. Not more than 2 hours for training
+    3. deepL_result.csv: Temporary file we can probably include in .gitignore @thomas-borer
+    4. df_localization.csv: Latest and greatest in terms of localization 
+
+## Meeting Notes: April 17th
+IMPORTANT NOTE: We are running very late. Defense is on the week of the 12th of may. We still do not have the complete translation.
+**IMPORTANT TASK: GET TRANSLATION READY ASAP!**
+
+1. **Traditional ML:**
+    - Problem: Long computing times
+    - Solution:
+        - Vectorization before pipeline -> save & reuse
+        - One set of Hyperparameters per vectorization only (do more if time allows)
+        - deepl_results ist die falsche Datei als Input -> richtige Datei?
+        - Use resources like Google Colab to access GPU -> speed x10
+
+
+
+
+## Meeting Notes: April 17th
+
+`NOTE: Time left until deadline May 2nd: Two weeks`
+
+1. **Mandatory task**: Text preprocessing
+    1. Modelization via vectorization of sentences with TF-IDF, Word2VEc, BoW (Bag of Words)
+    2. Modelizzation with two approaches: logistic regression, random forest, XGBoost, etc. and then in a second step with BERT, e.g. CamemBERT or FlauBERT
+3. **Optional task**: Image preprocessing
+    1. Bounding box: Grayscale images, binary threshold with 235, find contours, optional margins
+    2. Standardization: Removing white borders with cv2
+    3. Downsampling: Probably most common resolution of data set, 250px or 299px
+ 3. **Optional task**: Image modelization with three approaches
+    1. Classical way:
+    2. CNNs: ResNet, EfficientNet
+    3. Transformers: ViT (Vision Transformer), DTR (Meta AI)
+ 4. **Mandatory task**: Voting classifier which combines the result of text and image models  
+ 5. **Next steps**: Split work into
+    1. Text classification
+    3. Image preprocessing
+    4. Presentation in Streamlit
+
+
 ## Meeting Notes: April 8th
 
 **Peter's questions**
