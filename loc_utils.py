@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import deepl
+import text_utils
 import os
 deepl_file = 'language_analysis/df_localization.csv'
 deepl_output_file = 'language_analysis/deepL_result.csv'
@@ -16,7 +17,7 @@ def import_clean_data():
     df = pd.merge(X_train, y_train, left_index=True, right_index=True)
     df = text_utils.text_pre_processing(df)
     df = df[['productid', 'imageid', 'prdtypecode', 'bool_description','merged_text']]
-    df_lang = pd.read_csv('language_analysis/df_langdetect.csv', index_col=0)
+    df_lang = pd.read_csv('language_analysis/df_langdetect.csv')
     df_lang['lang'] = df_lang['gemini_lang'].fillna('fr')
     df_lang.drop(['merged_text', 'merged_langdetect', 'gemini_lang', 'imageid', 'prdtypecode', 'bool_description'], inplace=True, axis = 1)
     df_lang = pd.merge(df, df_lang, on = ['productid'], how='left')
