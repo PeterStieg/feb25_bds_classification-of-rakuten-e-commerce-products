@@ -28,4 +28,9 @@
 **tmp.*
 
 # Ignore folder checkpoints for Jupyter notebooks 
-/.ipynb_checkpoints/
+/.ipynb_checkpoints/checkpoints/*.pkl
+vectorized_data/*.pkl
+checkpoints/*.pkl
+vectorized_data/*.pkl
+checkpoints/*.pkl
+vectorized_data/*.pkl

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-import text_utils
 import deepl
+import text_utils
 import os
 deepl_file = 'language_analysis/df_localization.csv'
 deepl_output_file = 'language_analysis/deepL_result.csv'
@@ -17,7 +17,7 @@ def import_clean_data():
     df = pd.merge(X_train, y_train, left_index=True, right_index=True)
     df = text_utils.text_pre_processing(df)
     df = df[['productid', 'imageid', 'prdtypecode', 'bool_description','merged_text']]
-    df_lang = pd.read_csv('language_analysis/df_langdetect.csv', index_col=0)
+    df_lang = pd.read_csv('language_analysis/df_langdetect.csv')
     df_lang['lang'] = df_lang['gemini_lang'].fillna('fr')
     df_lang.drop(['merged_text', 'merged_langdetect', 'gemini_lang', 'imageid', 'prdtypecode', 'bool_description'], inplace=True, axis = 1)
     df_lang = pd.merge(df, df_lang, on = ['productid'], how='left')
@@ -34,16 +34,13 @@ def safe_create_column(column, data_frame):
     return data_frame
 
 def apply_translation_conditionally(df):
-    from tqdm.auto import tqdm
-    tqdm.pandas()
     mask = (
         ~df['lang'].isin(ignore_language_codes) &
         # removing french, language codes which do not use latin script as well as nonsense language codes
         # The fact that the LLM failed might indicate that there is something off with these strings
         (df['deepL_translation'].isna())
     )
-    translated = df.loc[mask, 'merged_text'].progress_apply(deepl_translation)
-    df.loc[mask, 'deepL_translation'] = translated.values
+    df.loc[mask, 'deepL_translation'] = df.loc[mask, 'merged_text'].apply(deepl_translation)
     return df
 
 def apply_translation_conditionally_in_chunks(df, chunk_size=200, output_file=deepl_output_file):
@@ -62,7 +59,7 @@ def apply_translation_conditionally_in_chunks(df, chunk_size=200, output_file=de
         df.update(df_chunk)
         
         # Write the processed chunk to CSV (append mode)
-        df_chunk.to_csv(output_file, mode='a', index=False, header=False)
+        df_chunk.to_csv(output_file, mode='a', index=True)
         
         # After the first chunk, subsequent chunks should not include the header
         rows_left -= chunk_size
