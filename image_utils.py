@@ -2,6 +2,7 @@ import os
 import cv2
 import re
 import imagehash
+import shutil
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
+from sklearn.model_selection import train_test_split
 
 """
 Image utility functions for extracting data from images.
@@ -48,9 +50,9 @@ def image_data_extractor(df, base_path="./images/image_train/"):
     extracted_data = []
 
     # Process each row in the input DataFrame
-    for _, row in df.iterrows():
+    for idx, row in df.iterrows():
         # Get productid and imageid from the DataFrame
-        product_id = row["productid"]
+        product_id = idx
         image_id = row["imageid"]
 
         # Initialize a dictionary to store data for this image
@@ -70,15 +72,18 @@ def image_data_extractor(df, base_path="./images/image_train/"):
             img = Image.open(file_path)
 
             # Extract basic image properties
-            image_data["width"] = img.size[0]
-            image_data["height"] = img.size[1]
-            image_data["format"] = img.format
+            # image_data["width"] = img.size[0]
+            # image_data["height"] = img.size[1]
+            # image_data["format"] = img.format
             image_data["mode"] = img.mode  # RGB, L, etc.
             image_data["file_size_kb"] = os.path.getsize(file_path) / 1024
+            """
             image_data["aspect_ratio"] = (
                 img.size[0] / img.size[1] if img.size[1] > 0 else None
             )
+            """
 
+            """
             # Extract metadata from image
             for key, value in img.info.items():
                 # Handle binary data and complex objects
@@ -97,6 +102,7 @@ def image_data_extractor(df, base_path="./images/image_train/"):
                         continue
                     if isinstance(value, (str, int, float, bool)) or value is None:
                         image_data[f"exif_{tag_name}"] = value
+            """
 
             # Color analysis if the image is in RGB mode
             if img.mode == "RGB":
@@ -108,6 +114,7 @@ def image_data_extractor(df, base_path="./images/image_train/"):
                 image_data["mean_g"] = mean_rgb[1]
                 image_data["mean_b"] = mean_rgb[2]
 
+                """
                 # Calculate dominant brightness
                 brightness = (
                     0.299 * img_array[:, :, 0]
@@ -121,6 +128,7 @@ def image_data_extractor(df, base_path="./images/image_train/"):
                 image_data["std_r"] = std_rgb[0]
                 image_data["std_g"] = std_rgb[1]
                 image_data["std_b"] = std_rgb[2]
+                """
 
         except Exception as e:
             image_data["error"] = str(e)
@@ -356,6 +364,10 @@ def crop_pad_and_resize_image_worker(
         # Crop to bounding box if provided
         if bbox and all(v is not None for v in bbox):
             x, y, w, h = bbox
+
+            # Convert NumPy float64 to integers for slicing
+            x, y, w, h = int(x), int(y), int(w), int(h)
+
             img = img[y : y + h, x : x + w]
 
         # Get current dimensions
@@ -514,7 +526,7 @@ def crop_pad_and_resize_image_parallel(
     for idx, row in df.iterrows():
         # Get productid and imageid from the DataFrame
         product_id = idx
-        image_id = row["imageid"]
+        image_id = int(row["imageid"])
 
         # Construct the file paths
         input_path = os.path.join(
@@ -593,9 +605,9 @@ def crop_pad_and_resize_image_parallel(
     excluded = sum(exclude_flags)
 
     print(f"Successfully processed {successful} of {len(worker_args)} images:")
-    print(f"  - Downscaled {downscaled} images")
-    print(f"  - Upscaled {upscaled} images")
-    print(f"  - Flagged {excluded} images for potential exclusion due to small size")
+    print(f"\t- Downscaled {downscaled} images")
+    print(f"\t- Upscaled {upscaled} images")
+    print(f"\t- Flagged {excluded} images for potential exclusion due to small size")
 
     # Return the DataFrame with the new columns
     return df
@@ -868,3 +880,114 @@ def create_duplicates_dataframe(unique_duplicates):
     duplicates_df["Similarity, pct"] = 100 * (1 - duplicates_df["hash distance"] / 64)
 
     return duplicates_df
+
+
+def copy_image_to_class_folders(
+    df_image_train,
+    input_folder="images/image_train_cpr/",
+    output_folder="images/image_train_vgg16/",
+):
+    """
+    Organize processed images into class-specific directories for model training.
+
+    This function takes preprocessed images and copies them into a structured directory
+    hierarchy suitable for training image classification models. It performs a train/validation
+    split (80/20 by default) and organizes images by their product type code into separate
+    class folders.
+
+    Parameters:
+    -----------
+    df_image_train : pandas.DataFrame
+        DataFrame containing product information with at least 'imageid' and 'prdtypecode' columns.
+        The DataFrame index should contain the product IDs.
+
+    input_folder : str, optional
+        Path to the directory containing preprocessed images (cropped, padded, and resized).
+        Images should follow the naming convention: "image_{imageid}_product_{productid}_cpr.jpg".
+        Default is "images/image_train_cpr/".
+
+    output_folder : str, optional
+        Base directory where the class-organized train/validation directories will be created.
+        This will contain two subdirectories: "image_train_vgg16" and "image_val_vgg16".
+        Default is "image/images_train_vgg16/".
+
+    Returns:
+    --------
+    None
+        The function creates directories and copies files but doesn't return any values.
+    """
+    # Define paths
+    train_path = os.path.join(output_folder, "image_train_vgg16")
+    val_path = os.path.join(output_folder, "image_val_vgg16")
+
+    # Create directory structure
+    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(train_path, exist_ok=True)
+    os.makedirs(val_path, exist_ok=True)
+
+    # Create class directories and perform train/val split
+    val_size = 0.2  # 80% training, 20% validation
+
+    # Get unique classes
+    classes = df_image_train["prdtypecode"].unique()
+
+    for class_id in classes:
+        # Create directories for this class
+        train_class_folder = os.path.join(train_path, str(class_id))
+        val_class_folder = os.path.join(val_path, str(class_id))
+
+        os.makedirs(train_class_folder, exist_ok=True)
+        os.makedirs(val_class_folder, exist_ok=True)
+
+        # Get all images for this class
+        class_images = df_image_train[df_image_train["prdtypecode"] == class_id]
+
+        # Split into train and validation
+        train_images, val_images = train_test_split(
+            class_images, test_size=val_size, random_state=42  # For reproducibility
+        )
+
+        # Copy training images
+        for idx, row in train_images.iterrows():
+            # Get productid and imageid from the DataFrame
+            product_id = idx
+            image_id = int(row["imageid"])
+
+            # Construct the file paths
+            input_path = os.path.join(
+                input_folder, f"image_{image_id}_product_{product_id}_cpr.jpg"
+            )
+
+            # Construct the filename for the output path
+            output_filename = f"image_{image_id}_product_{product_id}_vgg16.jpg"
+            output_path = os.path.join(train_class_folder, output_filename)
+
+            if os.path.exists(input_path):
+                shutil.copy2(input_path, output_path)
+            else:
+                print(f"Warning: {input_path} not found")
+
+        # Copy validation images - THIS PART WAS MISSING
+        for idx, row in val_images.iterrows():
+            # Get productid and imageid from the DataFrame
+            product_id = idx
+            image_id = int(row["imageid"])
+
+            # Construct the file paths
+            input_path = os.path.join(
+                input_folder, f"image_{image_id}_product_{product_id}_cpr.jpg"
+            )
+
+            # Construct the filename for the output path
+            output_filename = f"image_{image_id}_product_{product_id}_vgg16.jpg"
+            output_path = os.path.join(val_class_folder, output_filename)
+
+            if os.path.exists(input_path):
+                shutil.copy2(input_path, output_path)
+            else:
+                print(f"Warning: {input_path} not found")
+
+        print(
+            f"Processed class {class_id}: \n\t{len(train_images):,} training images \n\t{len(val_images):,} validation images",
+            end="\n\n",
+        )
