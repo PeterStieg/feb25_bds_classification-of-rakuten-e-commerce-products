@@ -28,9 +28,6 @@ and natural language processing tasks.
 """
 
 
-import re
-
-
 def clean_malformed_html_tags(text):
     """
     Removes leading and trailing malformed HTML tags.
