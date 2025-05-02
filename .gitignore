@@ -1,6 +1,9 @@
 # Ignore directories containing images
-/images/
-/Images/
+/images/*
+/Images/*
+
+# Re-include logo directory
+!/images/logos/
 
 # Ignore JPG/JPEG files regardless of location
 *.jpg
