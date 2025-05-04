@@ -991,3 +991,11 @@ def copy_image_to_class_folders(
             f"Processed class {class_id}: \n\t{len(train_images):,} training images \n\t{len(val_images):,} validation images",
             end="\n\n",
         )
+
+
+def hw():
+    """Test function to print "Hello, world!".
+
+    This function serves as a placeholder to demonstrate the module's structure.
+    """
+    print("Hello, world!")
