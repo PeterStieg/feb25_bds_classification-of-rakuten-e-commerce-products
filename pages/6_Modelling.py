@@ -17,15 +17,33 @@ st.write("Welcome to the Modelling page!")
 st.header("Section 1")
 st.write("This is a sample section for our modelling content.")
 
-# Example model section
-st.header("Model Selection")
-model_option = st.selectbox(
-    "Select a model:",
-    ("Linear Regression", "Random Forest", "XGBoost", "Neural Network"),
-)
+tab_text, tab_image = st.tabs(["Text classification", "Image classification"])
 
-st.write("You selected:", model_option)
+with tab_text:
 
-# Model parameters section
-st.header("Model Parameters")
-st.write("Add model parameter sliders and inputs here")
+    # Text model sectionö
+    text_model_option = st.selectbox(
+        "Select a model:",
+        ("Linear Regression", "Random Forest", "Neural Network"),
+    )
+
+    st.write("You selected:", text_model_option)
+
+    # Model parameters section
+    st.header("Model Parameters")
+    st.write("Add model parameter sliders and inputs here")
+
+
+with tab_image:
+
+    # Text model section
+    image_model_option = st.selectbox(
+        "Select a model:",
+        ("VGG16", "ResNet50", "InceptionV3"),
+    )
+
+    st.write("You selected:", image_model_option)
+
+    # Model parameters section
+    st.header("Model Parameters")
+    st.write("Add model parameter sliders and inputs here")

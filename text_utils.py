@@ -265,12 +265,12 @@ def text_cleaner(df):
             # Clean text
             cleaned_text = text
 
-            # Replace HTML tags with space and HTML entities with character
+            # Remove HTML tags with space and HTML entities with character
             cleaned_text = BeautifulSoup(cleaned_text, "html.parser").get_text(
                 separator=" "
             )
 
-            # Clean malformed HTML tags, e.g. leading and trailing tags without anchor brackets
+            # Remove malformed HTML tags, e.g. leading and trailing tags without anchor brackets
             cleaned_text = clean_malformed_html_tags(cleaned_text)
 
             # Remove URLs
