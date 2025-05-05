@@ -270,8 +270,10 @@ def text_cleaner(df):
                 separator=" "
             )
 
-            # Remove malformed HTML tags, e.g. leading and trailing tags without anchor brackets
-            cleaned_text = clean_malformed_html_tags(cleaned_text)
+            # Clean malformed HTML tags, e.g. leading and trailing tags without anchor brackets
+            # cleaned_text = clean_malformed_html_tags(cleaned_text)
+            '''We cannot discover most malformed html_tags the only thing we can try to find is malformed paragraph markers if they occur at the beginning and end of the description '''
+            cleaned_text = re.sub(r"^p([A-Z].*)p$", r"\1", cleaned_text)
 
             # Remove URLs
             cleaned_text = re.sub(r"https?://[^\s\"'<>()]+", " ", cleaned_text)
@@ -461,7 +463,7 @@ def text_pre_processing(df):
     df = remove_duplicate_description_information(df)
     # merge designation and description to merged_text, avoiding leading or trailing ' - ' while using it as seperators
     df["merged_text"] = np.where(
-        df["designation"].notna() & df["description"].notna(),
+        df["designation"].notna() & df["description"].notna() & (df["description"] != ""),
         df["designation"] + " - " + df["description"],
         df["designation"].fillna("") + df["description"].fillna(""),
     )
