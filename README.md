@@ -1,8 +1,20 @@
 # feb25_bds_classification-of-rakuten-e-commerce-products
 
+## Meeting Notes: May 5th
+
+1. **Streamlit**
+    1. Text preprocessing:
+       1. Fix errors on 4. Question marks
+       2. Fix errors on 5. Parentheses
+    2. Image preprocessing: Add preview for images shown in DataFrame
+    3. Large files, e.g. text data `df_text_clean.csv` and image data `vgg16_transfer_model.pth`
+        1. Host on Google Cloud Platform
+        2. Add model(s) to st.cache_data
+        3. Add progress bar
+
 ## Meeting Notes: April 22nd
 
-1. **Mandatory task**: Text preprocessing ()
+1. **Mandatory task**: Text preprocessing
     1. Save vectorizers in pickle file
     2. @Wilsbert12: Could you please correct these notes and fill in the gaps?
     3. Time estimate:
