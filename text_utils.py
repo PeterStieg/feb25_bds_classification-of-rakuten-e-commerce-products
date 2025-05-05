@@ -96,7 +96,31 @@ def clean_malformed_html_tags(text):
     return cleaned_text
 
 
-def text_cleaner(df):
+def text_cleaner(input_data):
+    """
+    Clean text in pandas DataFrame or individual strings automatically.
+
+    Args:
+        input_data: Either a DataFrame or a string to clean
+
+    Returns:
+        Either a cleaned DataFrame or a cleaned string
+    """
+    import pandas as pd
+
+    # Check if input is a DataFrame
+    if isinstance(input_data, pd.DataFrame):
+        return _process_dataframe(input_data)
+
+    # Check if input is a string-like object
+    elif isinstance(input_data, (str, bytes)):
+        return _clean_single_text(str(input_data))
+
+    else:
+        raise TypeError("Input must be either a pandas DataFrame or a string")
+
+
+def _process_dataframe(df):
     """
     Clean text in pandas DataFrame by removing unnecessary characters and normalizing spacing.
 
@@ -334,6 +358,61 @@ def text_cleaner(df):
 
     # Return cleaned DataFrame
     return df_clean
+
+
+def _clean_single_text(text):
+    """
+    Clean a single text string using the same rules as the DataFrame version.
+    """
+    if pd.isna(text) or not isinstance(text, str):
+        return ""
+
+    cleaned_text = str(text)
+
+    # Apply all the cleaning operations from the original function
+    # Remove HTML tags with space and HTML entities with character
+    cleaned_text = BeautifulSoup(cleaned_text, "html.parser").get_text(separator=" ")
+
+    # Remove malformed HTML tags
+    cleaned_text = clean_malformed_html_tags(cleaned_text)
+
+    # Remove URLs
+    cleaned_text = re.sub(r"https?://[^\s\"'<>()]+", " ", cleaned_text)
+
+    # Remove control characters and problematic whitespace
+    cleaned_text = re.sub(
+        r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\xa0\u2000-\u200F\u2028-\u202F\u205F\u2060-\u206F\uFEFF]",
+        " ",
+        cleaned_text,
+    )
+
+    # Error patterns that can be replaced
+    cleaned_text = re.sub(r'\\"', " ", cleaned_text)
+    cleaned_text = re.sub(r"\\ \'", " ' ", cleaned_text)
+    cleaned_text = re.sub(r"\\\'", "'", cleaned_text)
+
+    # Remove multiple question marks and inverted question marks
+    cleaned_text = re.sub(r"(\?{2,}|\¿(?=[\s\.,;:!?]))", " ", cleaned_text)
+
+    # Remove multiple dashes or hyphens
+    cleaned_text = re.sub(r"[-]{2,}", "-", cleaned_text)
+
+    # Fix separator patterns
+    cleaned_text = re.sub(r"(\S+)\s*(?://{2,}|\\\\+)\s+(\S+)", r"\1 \2", cleaned_text)
+
+    # Remove whitespace characters
+    cleaned_text = re.sub(r"\s+", " ", cleaned_text)
+
+    # Remove parentheses and quotes
+    cleaned_text = re.sub(r"[\(\)\[\]\{\}‹›«»]", " ", cleaned_text)
+
+    # Remove leading/trailing spaces
+    cleaned_text = re.sub(r"^\s+|\s+$", "", cleaned_text)
+
+    # Replace multiple spaces with a single space
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text)
+
+    return cleaned_text
 
 
 def text_merger(df):

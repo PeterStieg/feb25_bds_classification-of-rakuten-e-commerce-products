@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from PIL import Image
+from text_utils import text_cleaner
 
 df_text_clean = pd.read_csv("df_text_clean_streamlit.csv", index_col="productid")
 df_text_preprocessing = df_text_clean[["designation", "description"]]
@@ -131,10 +132,10 @@ with tab_text:
     st.header("Showcase text cleaning function")
     text = st.text_input(
         "Try text preprocessing:",
-        "Example   phrase     containing       spaces.",
+        "Example   phrase     containing       spaces, tags and accents: <p>Caf&eacute;</p>.",
     )
     st.write("The cleaned text is:")
-    cleaned_text = re.sub(r"\s{2,}", " ", text)
+    cleaned_text = text_cleaner(text)
     st.code(cleaned_text, language="None")
 
 with tab_image:
