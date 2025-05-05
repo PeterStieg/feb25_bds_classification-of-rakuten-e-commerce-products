@@ -7,7 +7,7 @@ import pandas as pd
 
 from PIL import Image
 
-df_text_clean = pd.read_csv("df_text_clean.csv", index_col="productid")
+df_text_clean = pd.read_csv("df_text_clean_streamlit.csv", index_col="productid")
 df_text_preprocessing = df_text_clean[["designation", "description"]]
 
 df_image_train = pd.read_csv("df_image_train.csv", index_col="productid")
