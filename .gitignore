@@ -41,3 +41,6 @@ checkpoints/*.pkl
 
 # Ignore model weights
 *.pth
+
+#Ignore virtual enviroment
+myenv/
