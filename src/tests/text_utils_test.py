@@ -1,8 +1,8 @@
 import pandas as pd
-import text_utils
+import utils.text_utils as text_utils
 import math
 
-clean_text_df = pd.read_csv('test_utils/clean_text_test.csv', index_col = 0)
+clean_text_df = pd.read_csv('src/tests/test_utils/clean_text_test.csv', index_col = 0)
 
 def test_clean_description():
     

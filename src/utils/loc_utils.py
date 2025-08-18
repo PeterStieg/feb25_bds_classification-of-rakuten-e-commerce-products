@@ -11,9 +11,9 @@ translator = deepl.Translator(auth_key) # check if API key exists in .env file
 
 
 def import_clean_data():
-    X_test = pd.read_csv("X_test.csv", index_col=0)
-    X_train = pd.read_csv("X_train.csv", index_col=0)
-    y_train = pd.read_csv("y_train.csv", index_col=0)
+    X_test = pd.read_csv("data/raw/X_test.csv", index_col=0)
+    X_train = pd.read_csv("data/raw/X_train.csv", index_col=0)
+    y_train = pd.read_csv("data/raw/y_train.csv", index_col=0)
     df = pd.merge(X_train, y_train, left_index=True, right_index=True)
     df = text_utils.text_pre_processing(df)
     df = df[['productid', 'imageid', 'prdtypecode', 'bool_description','merged_text']]
