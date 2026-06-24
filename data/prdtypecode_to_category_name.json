@@ -1,6 +1,6 @@
 {
     "en": {
-        "10": "Books",
+        "10": "Books > Subcategory Unknown",
         "2280": "Books > Magazines",
         "2705": "Books > eBooks",
         "2522": "Books > Stationery Supplies",
@@ -29,7 +29,7 @@
         "2220": "Pet Store > Dog Accessories and Food"
     },
     "fr": {
-        "10": "Livres",
+        "10": "Livres > Sous-catégorie inconnue",
         "2280": "Livres > Revues",
         "2705": "Livres > eBooks",
         "2522": "Livres > Fournitures de papeterie",

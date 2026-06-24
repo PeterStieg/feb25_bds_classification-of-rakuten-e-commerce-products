@@ -1,0 +1,15 @@
+{
+  "hypothesis_validation": {
+    "H1": "Inter-parent classification easier - SUPPORTED",
+    "H2": "Intra-parent classification harder - NEEDS VERIFICATION",
+    "H3": "Image features help fine-grained - REJECTED (Text superior)",
+    "H4": "Rare categories easier - ANALYSIS PENDING",
+    "H5": "Complexity affects performance - PARTIAL SUPPORT",
+    "H6": "Large categories perform better - ANALYSIS PENDING"
+  },
+  "key_findings": {
+    "multimodal_value": "Ensemble (0.8727) > Individual models",
+    "text_dominance": "Text models (SVM: 0.763, BERT: 0.863) > Image (VGG16: 0.518)",
+    "benchmark_exceeded": "Ensemble exceeds challenge benchmark (+7.6%)"
+  }
+}

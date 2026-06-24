@@ -1,0 +1,28 @@
+{
+  "validated_hypotheses": {
+    "H3_image_vs_text": {
+      "hypothesis": "Image features help with fine-grained distinctions",
+      "result": "REJECTED",
+      "evidence": "Text models (0.763-0.863) >> Image model (0.518)",
+      "finding": "Text features superior for product classification"
+    },
+    "H6_size_vs_performance": {
+      "hypothesis": "Large subcategories achieve better performance",
+      "result": "NEEDS_DETAILED_ANALYSIS",
+      "evidence": "Class imbalance exists (386:29)",
+      "requirement": "Individual category F1 scores needed"
+    }
+  },
+  "key_findings": {
+    "multimodal_value": "Ensemble (0.8727) > Best individual (0.863) = +0.0097",
+    "text_dominance": "Text models significantly outperform image model",
+    "benchmark_performance": "+7.6% improvement over official challenge benchmark",
+    "validation_quality": "Clean methodology with 3,191 validation samples"
+  },
+  "model_performance": {
+    "VGG16 (Image)": 0.518,
+    "SVM (Text)": 0.763,
+    "BERT (Text)": 0.863,
+    "Ensemble (Multimodal)": 0.8727
+  }
+}

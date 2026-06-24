@@ -1,0 +1,64 @@
+graph LR
+    %% Main sections
+    subgraph ClassicalML["Classical Machine Learning (Text)"]
+        direction LR
+        
+        %% Vectorization methods
+        subgraph Vectorization
+            direction LR
+            TFIDF["TF-IDF"]
+            CV["Count vectorizer"]
+        end
+        
+        %% Classical Machine Learning
+        subgraph Models
+            direction LR
+            LogReg["Logistic Regression"]
+            RF["Random Forest"]
+            SVM["Support Vector Machine"]
+            XG["XGBoost"]
+        end
+
+        %% Model selection
+        subgraph ModelSelection["Model Selection & Hyperparameter Tuning"]
+            direction TB
+            GridSearch["GridSearch"]
+            InternalCV["Internal Cross-Validation"]
+        end
+
+        BestModel["Best Model"]
+        
+        Evaluation["Evaluation on Test Data"]
+        
+    end
+    
+    subgraph BERT["camemBERT"]
+        BERTModel["Fine-tuned CamemBERT"]
+    end
+    
+    subgraph VGG["VGG16"]
+        VGGModel["Transfer learning with VGG16 neural network"]
+    end
+    
+    %% Connections between main components
+    Vectorization --> Models
+    Models --> ModelSelection
+    ModelSelection --> BestModel
+    BestModel --> Evaluation
+    Evaluation -.-> ModelSelection
+
+    %% Connections in ModelSelection
+    GridSearch --> InternalCV
+    InternalCV --> GridSearch
+
+    ClassicalML --> SoftVoting
+    BERT --> SoftVoting
+    VGG --> SoftVoting
+
+    SoftVoting["Soft Voting"] --> FinalPrediction["Final Prediction"]
+
+%% Apply default styles to ALL nodes
+classDef default fill:#FFF,stroke:#333,stroke-width:2px;
+
+%% Apply default styles to ALL edges
+linkStyle default stroke:#999,stroke-width:2px,color:black;

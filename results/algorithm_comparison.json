@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-08-06T20:50:25.127775",
+  "experiment_type": "algorithm_comparison",
+  "dataset_size": 67932,
+  "cv_folds": 3,
+  "scoring_metric": "f1_weighted",
+  "algorithms": {
+    "RandomForestClassifier(random_state=42)": {
+      "f1_weighted_score": 0.5448151003645557,
+      "cv_std": 0.006718841523660757,
+      "mean_fit_time": 39.45542065302531,
+      "best_params": {
+        "classifier": "RandomForestClassifier(random_state=42)",
+        "classifier__max_depth": 20,
+        "classifier__n_estimators": 100,
+        "vectorizer": "TfidfVectorizer()",
+        "vectorizer__max_features": 5000,
+        "vectorizer__ngram_range": [
+          1,
+          1
+        ]
+      }
+    },
+    "LogisticRegression(max_iter=1000, random_state=42)": {
+      "f1_weighted_score": 0.7434311698313656,
+      "cv_std": 0.0012109895867851769,
+      "mean_fit_time": 44.41184894243876,
+      "best_params": {
+        "classifier": "LogisticRegression(max_iter=1000, random_state=42)",
+        "classifier__C": 1,
+        "classifier__penalty": "l2",
+        "vectorizer": "TfidfVectorizer()",
+        "vectorizer__max_features": 5000,
+        "vectorizer__ngram_range": [
+          1,
+          1
+        ]
+      }
+    },
+    "SVC(random_state=42)": {
+      "f1_weighted_score": 0.7520994552406278,
+      "cv_std": 0.0014641231374617474,
+      "mean_fit_time": 549.0672319730123,
+      "best_params": {
+        "classifier": "SVC(random_state=42)",
+        "classifier__C": 1,
+        "classifier__kernel": "linear",
+        "vectorizer": "TfidfVectorizer()",
+        "vectorizer__max_features": 5000,
+        "vectorizer__ngram_range": [
+          1,
+          1
+        ]
+      }
+    },
+    "XGBClassifier(base_score=None, booster=None, callbacks=None,\n              colsample_bylevel=None, colsample_bynode=None,\n              colsample_bytree=None, device=None, early_stopping_rounds=None,\n              enable_categorical=False, eval_metric='logloss',\n              feature_types=None, feature_weights=None, gamma=None,\n              grow_policy=None, importance_type=None,\n              interaction_constraints=None, learning_rate=None, max_bin=None,\n              max_cat_threshold=None, max_cat_to_onehot=None,\n              max_delta_step=None, max_depth=None, max_leaves=None,\n              min_child_weight=None, missing=nan, monotone_constraints=None,\n              multi_strategy=None, n_estimators=None, n_jobs=None,\n              num_parallel_tree=None, ...)": {
+      "f1_weighted_score": 0.6643666100653391,
+      "cv_std": 0.0014471282932800931,
+      "mean_fit_time": 533.803567647934,
+      "best_params": {
+        "classifier": "XGBClassifier(base_score=None, booster=None, callbacks=None,\n              colsample_bylevel=None, colsample_bynode=None,\n              colsample_bytree=None, device=None, early_stopping_rounds=None,\n              enable_categorical=False, eval_metric='logloss',\n              feature_types=None, feature_weights=None, gamma=None,\n              grow_policy=None, importance_type=None,\n              interaction_constraints=None, learning_rate=None, max_bin=None,\n              max_cat_threshold=None, max_cat_to_onehot=None,\n              max_delta_step=None, max_depth=None, max_leaves=None,\n              min_child_weight=None, missing=nan, monotone_constraints=None,\n              multi_strategy=None, n_estimators=None, n_jobs=None,\n              num_parallel_tree=None, ...)",
+        "classifier__learning_rate": 0.1,
+        "classifier__max_depth": 3,
+        "classifier__n_estimators": 50,
+        "vectorizer": "TfidfVectorizer()",
+        "vectorizer__max_features": 5000,
+        "vectorizer__ngram_range": [
+          1,
+          1
+        ]
+      }
+    }
+  }
+}

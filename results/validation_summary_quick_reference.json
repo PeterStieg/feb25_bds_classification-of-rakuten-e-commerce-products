@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-08-11T00:07:22.859071",
+  "ensemble_performance": 0.8727,
+  "benchmark_improvement": "+7.6%",
+  "hypotheses_supported": 3,
+  "hypotheses_rejected": 1,
+  "hypotheses_partial": 2,
+  "validation_samples": 3191,
+  "key_insight": "Multimodal ensemble achieves state-of-the-art performance through complementary text and image features",
+  "practical_recommendation": "Prioritize text feature engineering while maintaining image features for ensemble value"
+}

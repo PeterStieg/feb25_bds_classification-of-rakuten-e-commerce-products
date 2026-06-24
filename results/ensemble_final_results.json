@@ -1,0 +1,25 @@
+{
+  "ensemble_performance": {
+    "f1_weighted": 0.8727,
+    "f1_macro": 0.8408,
+    "samples_evaluated": 3191,
+    "runtime_minutes": 61.8
+  },
+  "best_configuration": {
+    "svm_weight": 0.4,
+    "bert_weight": 0.4,
+    "vgg16_weight": 0.2
+  },
+  "baseline_comparison": {
+    "svm_f1": 0.763,
+    "vgg16_f1": 0.518,
+    "bert_f1_uncertain": 0.863,
+    "ensemble_improvement_vs_svm": 0.10970000000000002,
+    "ensemble_improvement_vs_vgg16": 0.3547
+  },
+  "benchmark_comparison": {
+    "official_text_benchmark": 0.8113,
+    "ensemble_vs_benchmark": 0.06140000000000001,
+    "percentage_improvement": 7.5681005793171465
+  }
+}
